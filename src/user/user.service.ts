@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -54,7 +58,7 @@ export class UserService {
   async findOne(id: number) {
     const findUser = await this.userRepository.findOneBy({ id: id });
     if (!findUser) {
-      throw new BadRequestException('User not found');
+      throw new NotFoundException('User not found');
     }
     return findUser;
   }
@@ -62,7 +66,7 @@ export class UserService {
   async update(id: number, updateUserDto: UpdateUserDto) {
     const user = await this.userRepository.findOneBy({ id: id });
     if (!user) {
-      throw new BadRequestException('User not found');
+      throw new NotFoundException('User not found');
     }
 
     if (updateUserDto.role) {
@@ -84,7 +88,7 @@ export class UserService {
   async remove(id: number) {
     const user = await this.userRepository.findOneBy({ id: id });
     if (!user) {
-      throw new BadRequestException('User not found');
+      throw new NotFoundException('User not found');
     }
     await this.userRepository.delete(user);
 
@@ -94,7 +98,7 @@ export class UserService {
   async removeAll() {
     const users = await this.userRepository.find();
     if (!users.length) {
-      throw new BadRequestException('Users not found');
+      throw new NotFoundException('Users not found');
     }
     await this.userRepository.remove(users);
   }

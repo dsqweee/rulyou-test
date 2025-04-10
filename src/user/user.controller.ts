@@ -8,6 +8,7 @@ import {
   Delete,
   Query,
   BadRequestException,
+  HttpCode,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -18,6 +19,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post('create')
+  @HttpCode(200)
   async create(@Body() createUserDto: CreateUserDto) {
     try {
       const result = await this.userService.create(createUserDto);
@@ -34,6 +36,7 @@ export class UserController {
   }
 
   @Get(['get', 'get/:id'])
+  @HttpCode(200)
   async getUsers(
     @Param('id') id?: string,
     @Query()
@@ -73,6 +76,7 @@ export class UserController {
   }
 
   @Patch('update/:id')
+  @HttpCode(200)
   async update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
     try {
       const result = await this.userService.update(+id, updateUserDto);
@@ -89,6 +93,7 @@ export class UserController {
   }
 
   @Delete('delete/:id')
+  @HttpCode(200)
   async remove(@Param('id') id: number) {
     try {
       const result = await this.userService.remove(+id);
@@ -105,6 +110,7 @@ export class UserController {
   }
 
   @Delete('delete')
+  @HttpCode(200)
   async removeAll() {
     try {
       const result = await this.userService.removeAll();
